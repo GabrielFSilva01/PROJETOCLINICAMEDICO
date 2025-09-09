@@ -1,3 +1,5 @@
+
+
 class Paciente:
     def __init__(self, PacienteID, NomePaciente, DataNascimento, EnderecoPaciente,
                  telPaciente, CidadeID, peso, Altura):

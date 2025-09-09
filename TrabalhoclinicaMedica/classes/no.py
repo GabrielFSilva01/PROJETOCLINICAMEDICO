@@ -1,26 +1,24 @@
-#//~~~[CLASSE NÓ]~~~\\
+# arvore.py
+
+# --- Classe Nó da árvore ---
 class No:
     def __init__(self, info):
         self.info = info
         self.esquerda = None
         self.direita = None
 
-#//~~~[CLASSE ÁRVORE BINÁRIA]~~~\\
+# --- Classe Árvore Binária ---
 class ArvoreBinaria:
     def __init__(self):
         self.raiz = None
 
-
-    #----------[Inserção de um nó na árvore]----------
-    #//-[FUNCAO INSERIR]-\\
+    # Inserção de nó
     def inserir(self, info):
         if self.raiz is None:
             self.raiz = No(info)
         else:
             self._inserir_recursivo(self.raiz, info)
 
-
-    #//-[FUNCAO INSERIR RECURSIVO]-\\
     def _inserir_recursivo(self, no, info):
         if info.codigo < no.info.codigo:
             if no.esquerda is None:
@@ -33,18 +31,13 @@ class ArvoreBinaria:
             else:
                 self._inserir_recursivo(no.direita, info)
 
-
-    #----------[Busca de um nó pelo código]----------
-    #//-[FUNCAO BUSCAR]-\\
+    # Busca por código
     def buscar(self, codigo):
         return self._buscar_recursivo(self.raiz, codigo)
 
-
-#//-[FUNCAO BUSCAR RECURSIVO]-\\
     def _buscar_recursivo(self, no, codigo):
         if no is None:
             return None
-        
         if codigo == no.info.codigo:
             return no.info
         elif codigo < no.info.codigo:
@@ -52,13 +45,10 @@ class ArvoreBinaria:
         else:
             return self._buscar_recursivo(no.direita, codigo)
 
-    #----------[Exclusão de um nó pelo código]----------
-    #//-[FUNCAO EXCLUIR]-\\
+    # Exclusão de nó
     def excluir(self, codigo):
         self.raiz = self._excluir_recursivo(self.raiz, codigo)
 
-
-#//-[FUNCAO EXCLUIR RECURSIVO]-\\
     def _excluir_recursivo(self, no, codigo):
         if no is None:
             return no
@@ -68,22 +58,29 @@ class ArvoreBinaria:
         elif codigo > no.info.codigo:
             no.direita = self._excluir_recursivo(no.direita, codigo)
         else:
+            # Nó encontrado
             if no.esquerda is None:
                 return no.direita
             elif no.direita is None:
                 return no.esquerda
-            
+            # Substitui pelo menor nó da subárvore direita
             temp = self._min_valor_no(no.direita)
             no.info = temp.info
             no.direita = self._excluir_recursivo(no.direita, temp.info.codigo)
-
         return no
 
-
-    #----------[Método auxiliar para encontrar o menor valor]----------
-    #//-[FUNCAO MIN VALOR NO]-\\
     def _min_valor_no(self, no):
         atual = no
         while atual.esquerda is not None:
             atual = atual.esquerda
         return atual
+
+    # Percorrer em ordem (in-order)
+    def percorrer_em_ordem(self):
+        self._percorrer_em_ordem_recursivo(self.raiz)
+
+    def _percorrer_em_ordem_recursivo(self, no):
+        if no is not None:
+            self._percorrer_em_ordem_recursivo(no.esquerda)
+            print(no.info)  # chama __str__ da classe
+            self._percorrer_em_ordem_recursivo(no.direita)
